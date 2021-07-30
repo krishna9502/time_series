@@ -1,0 +1,4 @@
+axes.formatter.min_exponent : 2
+axes.formatter.use_mathtext : True
+xtick.labelsize : 7
+ytick.labelsize : 7
