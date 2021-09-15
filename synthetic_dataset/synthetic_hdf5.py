@@ -39,6 +39,8 @@ for category in list(categories.keys()):
         olnum = result[5]
                 
         dataset = grp.create_dataset('M_'+f'{iteration:03d}'+'_'+str(mgc), data=data, dtype=float)
+        for count,data_ in enumerate(limits):
+            grp1.create_dataset('M_'+f'{iteration:03d}'+'_'+str(mgc)+str(count)+'limits', data=data_, dtype=float)
         for count,data_ in enumerate(ol):
             grp1.create_dataset('M_'+f'{iteration:03d}'+'_'+str(mgc)+str(count)+'ol', data=data_, dtype=float)
         for count,data_ in enumerate(gap):
