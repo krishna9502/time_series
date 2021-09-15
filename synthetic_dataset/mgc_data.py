@@ -22,6 +22,25 @@ class MGC_generator:
         days_in_months = [days_in_months[i] for i in first_days_idx]
         return first_days_idx, days_in_months
 
+    def calc_ol(self,data,limits):
+        ol= []
+        ol_num = []
+        for limit in limits:
+            ol_ = np.array(data) - np.array(limit)
+            ol_ = (ol_>0) * ol_
+            ol_num_ = np.sum(ol_>0)
+            ol.append(ol_.mean())
+            ol_num.append(ol_num_)
+        return ol, ol_num
+
+    def calc_gap(self,data,limits):
+        gap= []
+        for limit in limits:
+            gap_ = np.array(limit) - np.array(data)
+            gap_ = (gap_>0) * gap_
+            gap.append(gap_.mean())
+        return gap
+
     def generate_mgc_data(self,mgc):
         if mgc%10 == 1:
             ts_data = self.generate_uniform_data(mgc)
@@ -35,11 +54,31 @@ class MGC_generator:
             ts_data = self.generate_seasonal_data(mgc)
         elif mgc%10 == 6:
             ts_data = self.generate_cyclic_data(mgc)
-        return mgc, ts_data #list
+
+        ## limit sampling
+        ts_data_blocks = np.array(ts_data[-360:]).reshape((12,-1))
+
+        limits = []
+        ol_list = []
+        gap_list = []
+        olnum_list = []
+
+        for block in ts_data_blocks:
+            if (block.max()-block.min())/100 == 0:
+                limit_block = np.ones(100) * self.base_limit/100
+            else:
+                limit_block = np.arange(block.min(),block.max(),(block.max()-block.min())/100)
+            limits.append(limit_block)
+            ol_list.append(self.calc_ol(block,limit_block)[0])
+            gap_list.append(self.calc_gap(block,limit_block))
+            olnum_list.append(self.calc_ol(block,limit_block)[1])
+
+        return mgc, ts_data, limits, ol_list, gap_list, olnum_list  #list
 
     ## 1Uniform, choose: {anchor_value_center = (0.4,0.6), anchor_values_scale = 0.1, noise_factor = (0.1,0.5)} * base_limit
     def generate_uniform_data(self, mgc):
         base_limit = self.base_limits[mgc//10 - 1]
+        self.base_limit = base_limit
         num_days_months = self.days_in_months
         ## create random anchor values at the beginning of each month
         anchor_value_center = np.random.RandomState().uniform(low = 0.4 * base_limit, high = 0.6 * base_limit)
@@ -63,6 +102,7 @@ class MGC_generator:
     ## 2Monotonic, choose: {anchor_value_center = 0.5, anchor_values_scale = 0.1, noise_factor = (0.1,0.7)} * base_limit
     def generate_monotonic_data(self, mgc):
         base_limit = self.base_limits[mgc//10 - 1]
+        self.base_limit = base_limit
         num_days_months = self.days_in_months
         ## create random anchor values at the beginning of each month
         anchor_value_center = 0.5 * base_limit
@@ -88,6 +128,7 @@ class MGC_generator:
     ## 3Erratic, choose: {anchor_value_center = 0.5, anchor_values_scale = 0.1, noise_factor = (0.5,1.0)} * base_limit
     def generate_erratic_data(self, mgc):
         base_limit = self.base_limits[mgc//10 - 1]
+        self.base_limit = base_limit
         num_days_months = self.days_in_months
         ## create random anchor values at the beginning of each month
         anchor_value_center = 0.5 * base_limit
@@ -111,6 +152,7 @@ class MGC_generator:
     ## 4Sparse, choose: {anchor_value_center = 0.5, anchor_values_scale = 0.1, #p_empty_space = (0.5,0.8), noise_factor = (0.5,1.0)} * base_limit
     def generate_sparse_data(self, mgc):
         base_limit = self.base_limits[mgc//10 - 1]
+        self.base_limit = base_limit
         num_days_months = self.days_in_months
         ## create random anchor values at the beginning of each month
         anchor_value_center = 0.5 * base_limit
@@ -149,6 +191,7 @@ class MGC_generator:
     ## 5Seasonal, choose: {anchor_value_center = (0.4,0.6), anchor_values_scale = 0.1, noise_factor = (0.1,0.5)} * base_limit
     def generate_seasonal_data(self, mgc):
         base_limit = self.base_limits[mgc//10 - 1]
+        self.base_limit = base_limit
         anchor_values = None
         random_interp_values3 = []
         for year in range(3):
@@ -178,6 +221,7 @@ class MGC_generator:
     def generate_cyclic_data(self, mgc):
         period = np.random.RandomState().randint(4,11)
         base_limit = self.base_limits[mgc//10 - 1]
+        self.base_limit = base_limit
         anchor_values = None
         random_interp_valuesN = []
         iteration = 0
