@@ -7,7 +7,7 @@ from tqdm import tqdm
 from mgc_data import MGC_generator
 from standard_data import * 
 
-file = h5py.File("./../../dataset_folder/synthetic_data.hdf5", "w")
+file = h5py.File("./../../dataset_folder/synthetic_data_unmodified.hdf5", "w")
 
 
 # ## limit datasets

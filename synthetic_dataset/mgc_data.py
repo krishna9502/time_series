@@ -94,7 +94,8 @@ class MGC_generator:
         ## noise level around the interp points
         noise_factor1= np.random.RandomState().uniform(0.1,0.5, size = len(interp_values))
         noise_factor2= np.random.RandomState().uniform(0.1,0.5, size = len(interp_values))
-        random_interp_values = interp_values + np.random.RandomState().randint(low= -1*base_limit*noise_factor1, high= base_limit*noise_factor2, size= len(interp_values))
+        # random_interp_values = interp_values + np.random.RandomState().normal(0,base_limit*noise_factor2, size= len(interp_values))
+        random_interp_values = interp_values + np.random.RandomState().uniform(-1*base_limit*noise_factor1,base_limit*noise_factor2, size= len(interp_values))
         random_interp_values = np.round_(random_interp_values.clip(0,None)).tolist()
 
         return random_interp_values
@@ -120,7 +121,8 @@ class MGC_generator:
         ## noise level around the interp points
         noise_factor1= np.random.RandomState().uniform(0.1,0.7, size = len(interp_values))
         noise_factor2= np.random.RandomState().uniform(0.1,0.7, size = len(interp_values))
-        random_interp_values = interp_values + np.random.RandomState().randint(low= -1*base_limit*noise_factor1, high= base_limit*noise_factor2, size= len(interp_values))
+        # random_interp_values = interp_values + np.random.RandomState().normal(0,base_limit*noise_factor2, size= len(interp_values))
+        random_interp_values = interp_values + np.random.RandomState().uniform(-1*base_limit*noise_factor1,base_limit*noise_factor2, size= len(interp_values))
         random_interp_values = np.round_(random_interp_values.clip(0,None)).tolist()
 
         return random_interp_values
@@ -144,7 +146,8 @@ class MGC_generator:
         ## noise level around the interp points
         noise_factor1= np.random.RandomState().uniform(0.5,1.0, size = len(interp_values))
         noise_factor2= np.random.RandomState().uniform(0.5,1.0, size = len(interp_values))
-        random_interp_values = interp_values + np.random.RandomState().randint(low= -1*base_limit*noise_factor1, high= base_limit*noise_factor2, size= len(interp_values))
+        # random_interp_values = interp_values + np.random.RandomState().normal(0,base_limit*noise_factor2, size= len(interp_values))
+        random_interp_values = interp_values + np.random.RandomState().uniform(-1*base_limit*noise_factor1,base_limit*noise_factor2, size= len(interp_values))
         random_interp_values = np.round_(random_interp_values.clip(0,None)).tolist()
 
         return random_interp_values
@@ -181,7 +184,8 @@ class MGC_generator:
         ## noise level around the interp points
         noise_factor1= np.random.RandomState().uniform(0.5,1.0, size = len(interp_values))
         noise_factor2= np.random.RandomState().uniform(0.5,1.0, size = len(interp_values))
-        random_interp_values = interp_values + np.random.RandomState().randint(low= -1*base_limit*noise_factor1, high= base_limit*noise_factor2, size= len(interp_values))
+        # random_interp_values = interp_values + np.random.RandomState().normal(0,base_limit*noise_factor2, size= len(interp_values))
+        random_interp_values = interp_values + np.random.RandomState().uniform(-1*base_limit*noise_factor1,base_limit*noise_factor2, size= len(interp_values))
         random_interp_values = np.round_(random_interp_values.clip(0,None)).tolist()
         random_interp_values = random_interp_values * mask_values
         random_interp_values = random_interp_values.tolist()
@@ -211,7 +215,8 @@ class MGC_generator:
             ## noise level around the interp points
             noise_factor1= np.random.RandomState().uniform(0.1,0.5, size = len(interp_values))
             noise_factor2= np.random.RandomState().uniform(0.1,0.5, size = len(interp_values))
-            random_interp_values = interp_values + np.random.RandomState().randint(low= -1*base_limit*noise_factor1, high= base_limit*noise_factor2, size= len(interp_values))
+            # random_interp_values = interp_values + np.random.RandomState().normal(0,base_limit*noise_factor2, size= len(interp_values))
+            random_interp_values = interp_values + np.random.RandomState().uniform(-1*base_limit*noise_factor1,base_limit*noise_factor2, size= len(interp_values))
             random_interp_values = np.round_(random_interp_values.clip(0,None)).tolist()
             random_interp_values3 += random_interp_values
 
@@ -247,7 +252,8 @@ class MGC_generator:
             ## noise level around the interp points
             noise_factor1= np.random.RandomState().uniform(0.1,0.5, size = len(interp_values))
             noise_factor2= np.random.RandomState().uniform(0.1,0.5, size = len(interp_values))
-            random_interp_values = interp_values + np.random.RandomState().randint(low= -1*base_limit*noise_factor1, high= base_limit*noise_factor2, size= len(interp_values))
+            # random_interp_values = interp_values + np.random.RandomState().normal(0,base_limit*noise_factor2, size= len(interp_values))
+            random_interp_values = interp_values + np.random.RandomState().uniform(-1*base_limit*noise_factor1,base_limit*noise_factor2, size= len(interp_values))
             random_interp_values = np.round_(random_interp_values.clip(0,None)).tolist()
             random_interp_valuesN += random_interp_values
             iteration+=1
