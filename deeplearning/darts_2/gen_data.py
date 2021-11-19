@@ -48,7 +48,7 @@ x_values = np.arange(len(dates))
 
 
 # ## 1.trend + pattern noise
-df = pd.DataFrame(columns=['merchant','date','time_idx','value'])
+df = pd.DataFrame(columns=['merchant','date','time_idx','value','dataset'])
 
 # fig,ax = plt.subplots()
 
@@ -67,7 +67,7 @@ for idx in range(1000):
     # fig.canvas.draw()
     # plt.pause(1)
 
-    df_ = pd.DataFrame(data={'merchant':[merchant]*len(dates), 'date': dates, 'time_idx':x_values, 'value': y_values})
+    df_ = pd.DataFrame(data={'merchant':[merchant]*len(dates), 'date': dates, 'time_idx':x_values, 'value': y_values,'dataset': [1]*len(dates)})
     df = pd.concat([df,df_], ignore_index=True)
 
     print('iteration-'+str(idx))
@@ -100,7 +100,7 @@ for idx in range(1000):
     # fig.canvas.draw()
     # plt.pause(1)
 
-    df_ = pd.DataFrame(data={'merchant':[merchant]*len(dates), 'date': dates, 'time_idx':x_values, 'value': y_values})
+    df_ = pd.DataFrame(data={'merchant':[merchant]*len(dates), 'date': dates, 'time_idx':x_values, 'value': y_values,'dataset': [2]*len(dates)})
     df = pd.concat([df,df_], ignore_index=True)
 
     print('iteration-'+str(idx))
@@ -144,7 +144,7 @@ for idx in range(1000):
     # fig.canvas.draw()
     # plt.pause(1)
 
-    df_ = pd.DataFrame(data={'merchant':[merchant]*len(dates), 'date': dates, 'time_idx':x_values, 'value': y_values})
+    df_ = pd.DataFrame(data={'merchant':[merchant]*len(dates), 'date': dates, 'time_idx':x_values, 'value': y_values,'dataset': [3]*len(dates)})
     df = pd.concat([df,df_], ignore_index=True)
 
     print('iteration-'+str(idx))
@@ -192,7 +192,7 @@ for idx in range(1000):
     # fig.canvas.draw()
     # plt.pause(1)
 
-    df_ = pd.DataFrame(data={'merchant':[merchant]*len(dates), 'date': dates, 'time_idx':x_values, 'value': y_values})
+    df_ = pd.DataFrame(data={'merchant':[merchant]*len(dates), 'date': dates, 'time_idx':x_values, 'value': y_values,'dataset': [4]*len(dates)})
     df = pd.concat([df,df_], ignore_index=True)
 
     print('iteration-'+str(idx))
@@ -203,25 +203,29 @@ df.to_csv('pattern_data4.csv',index=False)
 df = pd.DataFrame(columns=['merchant','date','time_idx','value'])
 
 # fig,ax = plt.subplots()
+choices = [[1,0,0],[1,1,0],[1,0,1],[1,1,1]]
 
 for idx in range(1000):
 
     merchant = 'M' + str(idx) + '_5'
 
-    anchor_yvalues = np.random.randint(anchor_limit*0.3,anchor_limit*0.7,4)
-    y_values = np.interp(x_values,anchor_xvalues, anchor_yvalues)
-    noise = generate_noise_weekly(x_values,10**5)
-    y_values += noise
+    dataset = np.random.randint(4) + 1
+    choice_pick = choices[dataset-1]
+
+    if choice_pick[0]:
+        anchor_yvalues = np.random.randint(anchor_limit*0.3,anchor_limit*0.7,4)
+        y_values = np.interp(x_values,anchor_xvalues, anchor_yvalues)
+        noise = generate_noise_weekly(x_values,10**5)
+        y_values += noise
 
     ## sinusoid
-    if random.choice([True, False]):
+    if choice_pick[1]:
         amplitude = 10**5
         y_sinusoid = amplitude * np.sin(2*np.pi*x_values/np.random.randint(180,500))
-        y_values += y_sinusoid 
+        y_values += y_sinusoid
 
     ## seasonal spikes
-    if random.choice([True, False]):
-
+    if choice_pick[2]:
         start_spike = np.random.randint(90)
         gap_spike = np.random.randint(120,300)
         spike_xvalues = []
@@ -243,7 +247,7 @@ for idx in range(1000):
     # fig.canvas.draw()
     # plt.pause(1)
 
-    df_ = pd.DataFrame(data={'merchant':[merchant]*len(dates), 'date': dates, 'time_idx':x_values, 'value': y_values})
+    df_ = pd.DataFrame(data={'merchant':[merchant]*len(dates), 'date': dates, 'time_idx':x_values, 'value': y_values,'dataset': [dataset]*len(dates)})
     df = pd.concat([df,df_], ignore_index=True)
 
     print('iteration-'+str(idx))
